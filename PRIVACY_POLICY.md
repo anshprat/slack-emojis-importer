@@ -4,7 +4,7 @@
 
 ## Overview
 
-Slack Emoji Importer is a Chrome extension that searches emojis from slackmojis.com and slackemoji.com and allows importing them directly into your Slack workspace. This privacy policy explains our data practices and commitment to user privacy.
+Slack Emoji Importer is a Chrome and Firefox extension that searches emojis from slackmojis.com and slackemoji.com and allows importing them directly into your Slack workspace. This privacy policy explains our data practices and commitment to user privacy.
 
 ## Data Collection and Usage
 
@@ -68,6 +68,7 @@ https://github.com/anshu-weaver/slack-emojis-importer
 
 This extension complies with:
 - Chrome Web Store Developer Program Policies
+- Firefox Add-on Policies
 - General Data Protection Regulation (GDPR)
 - California Consumer Privacy Act (CCPA)
 

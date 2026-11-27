@@ -1,6 +1,6 @@
 # Slack Emoji Importer
 
-Chrome extension that embeds a search UI into your Slack workspace's emoji customization page, letting you find and import emojis from slackmojis.com and slackemoji.com with one click.
+Chrome and Firefox extension that embeds a search UI into your Slack workspace's emoji customization page, letting you find and import emojis from slackmojis.com and slackemoji.com with one click.
 
 ## Features
 
@@ -12,12 +12,24 @@ Chrome extension that embeds a search UI into your Slack workspace's emoji custo
 
 ## Installation
 
-### Manual Installation (Development)
+### Chrome (Development)
 1. Clone this repository
 2. Open `chrome://extensions/` in Chrome
 3. Enable "Developer mode"
 4. Click "Load unpacked" and select this extension's directory
 5. Navigate to `https://{your-workspace}.slack.com/customize/emoji`
+
+### Firefox (Development)
+
+Firefox 140 or later is necessary.
+
+1. Clone this repository
+2. Run `./package.sh firefox`. This writes the Firefox build to `build/firefox/`.
+3. Open `about:debugging#/runtime/this-firefox`
+4. Click **Load Temporary Add-on** and select `build/firefox/manifest.json`. Do not select the `manifest.json` in the repository root: that one is for Chrome.
+5. Navigate to `https://{your-workspace}.slack.com/customize/emoji`
+
+Firefox removes a temporary add-on when it closes. To keep the add-on installed, sign it on addons.mozilla.org as unlisted (see [Packaging](#packaging)).
 
 ## Usage
 
@@ -42,9 +54,22 @@ This extension does not collect, store, or transmit any user data. See [PRIVACY_
 
 ## Packaging
 
+Run `./package.sh` to make both zips. The script needs `jq` and `zip`.
+
+- `./package.sh chrome` makes `slack-emoji-importer-chrome-vX.Y.Z.zip` for the Chrome Web Store.
+- `./package.sh firefox` makes `slack-emoji-importer-firefox-vX.Y.Z.zip` for addons.mozilla.org (AMO).
+
+The two browsers use the same JavaScript, CSS and icons. Only the manifest is different:
+
+- Chrome uses `manifest.json` from the repository root as is.
+- Firefox uses `manifest.json` merged with `firefox/manifest.overrides.json`. The Firefox manifest runs `background.js` as an event page, because Firefox has no background service worker. It also adds the add-on ID and the "no data collection" statement that AMO requires.
+
+To check the Firefox build, run `npx web-ext lint --source-dir build/firefox`.
+
+To sign the Firefox build for your own use (unlisted, stays installed after restarts), put your AMO API keys in a file as `WEB_EXT_API_KEY` and `WEB_EXT_API_SECRET`, load them into the shell, then run:
+
 ```bash
-chmod +x package.sh
-./package.sh
+npx web-ext sign --channel=unlisted --source-dir build/firefox --artifacts-dir build/signed
 ```
 
-This creates a zip file ready for Chrome Web Store upload.
+Create the API keys at https://addons.mozilla.org/en-US/developers/addon/api/key/.
